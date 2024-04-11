@@ -1,0 +1,21 @@
+syntax="proto3";
+package service;
+option go_package = "../../service";
+
+import "userModel.proto";
+
+message UserRequest{
+  string UserName=1;
+  string Password=2;
+}
+
+message UserResponse{
+  UserModel Data = 1;
+  uint32 Code = 2;
+}
+
+service UserService{
+  rpc Login(UserRequest) returns (UserResponse);
+  rpc Register(UserRequest) returns (UserResponse);
+  rpc GetUser(UserRequest) returns (UserResponse);
+}

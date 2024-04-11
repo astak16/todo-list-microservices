@@ -1,0 +1,16 @@
+server:
+  name: user
+  host: 127.0.0.1
+  port: 10001
+  jwtSecret: uccs
+mysql:
+  driverName: mysql
+  host: go-uccs-1
+  port: 3306
+  database: todo-list
+  username: root
+  password: 123456
+  charset: utf8mb4
+etcd:
+  host: etcd-server
+  port: 2379
