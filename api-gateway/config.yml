@@ -1,0 +1,9 @@
+server:
+  name: api-gateway 
+  host: 127.0.0.1
+  port: 8080
+etcd:
+  host: etcd-server
+  port: 2379
+  prefix: /service/uccs
+

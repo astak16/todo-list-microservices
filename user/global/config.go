@@ -18,8 +18,9 @@ type MySql struct {
 }
 
 type Etcd struct {
-	Host string `mapstructure:"host"`
-	Port int    `mapstructure:"port"`
+	Host   string `mapstructure:"host"`
+	Port   int    `mapstructure:"port"`
+	Prefix string `mapstructure:"prefix"`
 }
 
 type ServerInfo struct {

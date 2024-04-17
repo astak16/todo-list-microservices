@@ -2,7 +2,7 @@ package handler
 
 import (
 	"context"
-	"user/model"
+	"fmt"
 	"user/service"
 )
 
@@ -13,8 +13,11 @@ func NewAuthService() *AuthService {
 }
 
 func (*AuthService) Register(ctx context.Context, req *service.UserRequest) (resp *service.UserResponse, err error) {
-	var user model.User
-	user.Create(req)
+	fmt.Println("register succss", req)
+
+	// var user model.User
+
+	// user.Create(req)
 	return nil, nil
 }
 
