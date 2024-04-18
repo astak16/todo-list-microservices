@@ -23,7 +23,7 @@ func migartion() {
 	global.DB.Set("gorm:table_options", fmt.Sprintf("charset=%s", global.MySqlConfig.Charset)).AutoMigrate(&User{})
 }
 
-func (u *User) Create(req *service.UserRequest) (*User, error) {
+func (u *User) CreateUser(req *service.UserRequest) (*User, error) {
 	exist := u.CheckUserIsExist(req.UserName)
 	if exist {
 		return nil, errors.New("用户已经存在")
@@ -37,6 +37,17 @@ func (u *User) Create(req *service.UserRequest) (*User, error) {
 		return nil, err
 	}
 
+	return &user, nil
+}
+
+func (u *User) GetUser(req *service.UserRequest) (*User, error) {
+	var user User
+	if exist := u.CheckUserIsExist(req.UserName); !exist {
+		return nil, errors.New("用户不存在")
+	}
+	if err := global.DB.Where("user_name = ? AND password = ?", req.UserName, req.Password).First(&user).Error; err != nil {
+		return nil, err
+	}
 	return &user, nil
 }
 

@@ -15,7 +15,7 @@ func NewAuthService() *AuthService {
 
 func (*AuthService) Register(ctx context.Context, req *service.UserRequest) (resp *service.UserResponse, err error) {
 	var user model.User
-	u, err := user.Create(req)
+	u, err := user.CreateUser(req)
 
 	if err != nil {
 		return nil, err
@@ -31,7 +31,19 @@ func (*AuthService) Register(ctx context.Context, req *service.UserRequest) (res
 }
 
 func (*AuthService) Login(ctx context.Context, req *service.UserRequest) (resp *service.UserResponse, err error) {
-	return nil, nil
+	var user model.User
+	u, err := user.GetUser(req)
+	if err != nil {
+		return nil, err
+	}
+
+	return &service.UserResponse{
+		Code: 200,
+		Data: &service.UserModel{
+			UserID:   strconv.Itoa(int(u.ID)),
+			UserName: u.UserName,
+		},
+	}, nil
 }
 
 func (*AuthService) GetUser(ctx context.Context, req *service.UserRequest) (resp *service.UserResponse, err error) {
