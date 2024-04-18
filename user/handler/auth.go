@@ -2,7 +2,8 @@ package handler
 
 import (
 	"context"
-	"fmt"
+	"strconv"
+	"user/model"
 	"user/service"
 )
 
@@ -13,12 +14,20 @@ func NewAuthService() *AuthService {
 }
 
 func (*AuthService) Register(ctx context.Context, req *service.UserRequest) (resp *service.UserResponse, err error) {
-	fmt.Println("register succss", req)
+	var user model.User
+	u, err := user.Create(req)
 
-	// var user model.User
+	if err != nil {
+		return nil, err
+	}
 
-	// user.Create(req)
-	return nil, nil
+	return &service.UserResponse{
+		Code: 200,
+		Data: &service.UserModel{
+			UserID:   strconv.Itoa(int(u.ID)),
+			UserName: u.UserName,
+		},
+	}, nil
 }
 
 func (*AuthService) Login(ctx context.Context, req *service.UserRequest) (resp *service.UserResponse, err error) {

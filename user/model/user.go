@@ -1,13 +1,16 @@
 package model
 
 import (
+	"errors"
 	"fmt"
 	"user/global"
 	"user/service"
+
+	"gorm.io/gorm"
 )
 
 type User struct {
-	UserID   string `gorm:"primarykey;unique;column:user_id"`
+	ID       uint   `gorm:"primarykey;unique;column:id"`
 	UserName string `gorm:"unique;column:user_name"`
 	Password string `gorm:"column:password"`
 }
@@ -20,13 +23,26 @@ func migartion() {
 	global.DB.Set("gorm:table_options", fmt.Sprintf("charset=%s", global.MySqlConfig.Charset)).AutoMigrate(&User{})
 }
 
-func (u *User) Create(req *service.UserRequest) User {
-	// CheckUserIsExist(req.UserName)
-	return User{}
+func (u *User) Create(req *service.UserRequest) (*User, error) {
+	exist := u.CheckUserIsExist(req.UserName)
+	if exist {
+		return nil, errors.New("用户已经存在")
+	}
+
+	user := User{
+		UserName: req.UserName,
+		Password: req.Password,
+	}
+	if err := global.DB.Create(&user).Error; err != nil {
+		return nil, err
+	}
+
+	return &user, nil
 }
 
-func CheckUserIsExist(userName string) bool {
-	// a := global.DB.Model(&User{}).Where("user_name = ?", userName).First(&User{})
-	// fmt.Println(a)
+func (u *User) CheckUserIsExist(userName string) bool {
+	if err := global.DB.Model(&User{}).Where("user_name = ?", userName).First(&u).Error; err == gorm.ErrRecordNotFound {
+		return false
+	}
 	return true
 }

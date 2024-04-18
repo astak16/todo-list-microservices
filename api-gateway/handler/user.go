@@ -2,14 +2,12 @@ package handler
 
 import (
 	"api-gateway/service"
-	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
 
 func UserRegister(ctx *gin.Context) {
-
 	userName := ctx.Query("userName")
 	password := ctx.Query("password")
 	if userName == "" {
@@ -25,9 +23,22 @@ func UserRegister(ctx *gin.Context) {
 		Password: password,
 	}
 
-	fmt.Println("userReq", ctx.Keys["user"])
-
 	userService := ctx.Keys["user"].(service.UserServiceClient)
-	userService.Register(ctx, &userReq)
-	ctx.JSON(http.StatusOK, gin.H{"message": "注册成功"})
+	u, err := userService.Register(ctx, &userReq)
+	if err != nil {
+		ctx.JSON(http.StatusOK, gin.H{
+			"code":    400,
+			"message": err.Error(),
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{
+		"code":    200,
+		"message": "注册成功",
+		"user": service.UserModel{
+			UserID:   u.Data.UserID,
+			UserName: u.Data.UserName,
+		},
+	})
 }
