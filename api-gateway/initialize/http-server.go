@@ -14,8 +14,12 @@ import (
 
 func NewHttpServer(conn *grpc.ClientConn) {
 	userService := service.NewUserServiceClient(conn)
+	taskService := service.NewTaskServiceClient(conn)
 
-	clients := []middleware.ProtoClient{{Key: "user", Value: userService}}
+	clients := []middleware.ProtoClient{
+		{Key: "user", Value: userService},
+		{Key: "task", Value: taskService},
+	}
 	m := middleware.InitMiddleware(clients)
 	ginRouter := routes.NewRoute(m)
 

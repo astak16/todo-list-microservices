@@ -16,6 +16,9 @@ func NewRoute(middleware gin.HandlerFunc) *gin.Engine {
 		// 注册
 		v1.POST("/user/register", handler.UserRegister)
 		v1.POST("/user/login", handler.UserLogin)
+
+		task := v1.Group("/task")
+		task.POST("/create", handler.CreateTask)
 	}
 	return ginRouter
 }

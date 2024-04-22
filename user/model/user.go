@@ -3,6 +3,7 @@ package model
 import (
 	"errors"
 	"fmt"
+	"time"
 	"user/global"
 	"user/service"
 
@@ -10,9 +11,12 @@ import (
 )
 
 type User struct {
-	ID       uint   `gorm:"primarykey;unique;column:id"`
-	UserName string `gorm:"unique;column:user_name"`
-	Password string `gorm:"column:password"`
+	ID        uint       `gorm:"primarykey;unique;column:id"`
+	UserName  string     `gorm:"unique;column:user_name"`
+	Password  string     `gorm:"column:password"`
+	CreatedAt *time.Time `gorm:"column:created_at;autoCreateTime"`
+	UpdatedAt *time.Time `gorm:"column:updated_at;autoUpdateTime"`
+	DeletedAt *time.Time `gorm:"column:deleted_at;default:null"`
 }
 
 func InitUser() {

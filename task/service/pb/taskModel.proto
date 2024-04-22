@@ -1,0 +1,13 @@
+syntax="proto3";
+package pb;
+option go_package = "../../service";
+
+message TaskModel{
+  uint32 taskID = 1;
+  string userID = 2;
+  string status = 3;
+  string title = 4;
+  string content = 5;
+  string startTime = 6;
+  string endTime = 7;
+}

@@ -29,7 +29,6 @@ func InitGrpc() (*grpc.ClientConn, error) {
 	resolver.Register(d)
 
 	conn, err := grpc.Dial(d.Scheme()+":///"+prefix,
-		grpc.WithDefaultServiceConfig(`{"loadBalancingPolicy": "round_robin"}`),
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
 	)
 

@@ -1,7 +1,7 @@
 server:
-  name: user
+  name: task
   host: 127.0.0.1
-  port: 10001
+  port: 10002
   jwtSecret: uccs
 mysql:
   driverName: mysql
@@ -14,4 +14,4 @@ mysql:
 etcd:
   host: etcd-server
   port: 2379
-  prefix: /service/user
+  prefix: /service/task
