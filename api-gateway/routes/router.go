@@ -19,6 +19,7 @@ func NewRoute(middleware gin.HandlerFunc) *gin.Engine {
 
 		task := v1.Group("/task")
 		task.POST("/create", handler.CreateTask)
+		task.PUT("/update", handler.UpdateTask)
 	}
 	return ginRouter
 }

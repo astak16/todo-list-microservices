@@ -1,6 +1,7 @@
 package model
 
 import (
+	"errors"
 	"fmt"
 	"task/global"
 	"task/service"
@@ -8,7 +9,7 @@ import (
 )
 
 type Task struct {
-	ID        uint       `gorm:"primarykey;unique;column:id"`
+	ID        uint32     `gorm:"primarykey;unique;column:id"`
 	UserID    string     `gorm:"column:user_id;not null"`
 	Status    string     `gorm:"column:status"`
 	Title     string     `gorm:"column:title"`
@@ -41,4 +42,30 @@ func (*Task) CreateTask(req *service.TaskRequest) (*Task, error) {
 		return nil, err
 	}
 	return &task, nil
+}
+
+func (t *Task) UpdateTask(req *service.TaskRequest) (*Task, error) {
+	if isExist := t.CheckTaskIsExist(req.TaskID); !isExist {
+		return nil, errors.New("任务不存在")
+	}
+	task := Task{
+		ID:        req.TaskID,
+		Title:     req.Title,
+		Content:   req.Content,
+		Status:    req.Status,
+		StartTime: req.StartTime,
+		EndTime:   req.EndTime,
+	}
+	if err := global.DB.Model(&Task{}).Where("id = ?", req.TaskID).Updates(&task).Error; err != nil {
+		return nil, err
+	}
+	return &task, nil
+}
+
+func (*Task) CheckTaskIsExist(taskID uint32) bool {
+	var task Task
+	if err := global.DB.Model(&Task{}).Where("id = ?", taskID).First(&task).Error; err != nil {
+		return false
+	}
+	return true
 }

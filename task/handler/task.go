@@ -14,8 +14,8 @@ func NewTaskService() *TaskService {
 
 func (*TaskService) TaskCreate(ctx context.Context, req *service.TaskRequest) (resp *service.TaskResponse, err error) {
 	var task model.Task
-	t, errr := task.CreateTask(req)
-	if errr != nil {
+	t, err := task.CreateTask(req)
+	if err != nil {
 		return nil, err
 	}
 
@@ -32,8 +32,23 @@ func (*TaskService) TaskCreate(ctx context.Context, req *service.TaskRequest) (r
 	}, nil
 }
 
-func (t *TaskService) TaskUpdate(ctx context.Context, req *service.TaskRequest) (resp *service.TaskResponse, err error) {
-	return nil, nil
+func (*TaskService) TaskUpdate(ctx context.Context, req *service.TaskRequest) (resp *service.TaskResponse, err error) {
+	var task model.Task
+	t, err := task.UpdateTask(req)
+	if err != nil {
+		return nil, err
+	}
+	return &service.TaskResponse{
+		Code: 200,
+		TaskDetail: &service.TaskModel{
+			TaskID:    t.ID,
+			Status:    t.Status,
+			Title:     t.Title,
+			Content:   t.Content,
+			StartTime: t.StartTime,
+			EndTime:   t.EndTime,
+		},
+	}, nil
 }
 
 func (t *TaskService) TaskDelete(ctx context.Context, req *service.TaskRequest) (resp *service.TaskResponse, err error) {
