@@ -107,3 +107,24 @@ func DeleteTask(ctx *gin.Context) {
 	}
 	ctx.JSON(http.StatusOK, gin.H{"code": 200, "message": "删除成功"})
 }
+
+func TaskList(ctx *gin.Context) {
+	taskService := ctx.Keys["task"].(service.TaskServiceClient)
+	t, err := taskService.TaskList(ctx, &service.TaskRequest{})
+	if err != nil {
+		ctx.JSON(http.StatusOK, gin.H{"code": 400, "message": err.Error()})
+		return
+	}
+	tasks := make([]service.TaskModel, 0)
+	for _, v := range t.Tasks {
+		tasks = append(tasks, service.TaskModel{
+			TaskID:    v.TaskID,
+			Status:    v.Status,
+			Title:     v.Title,
+			Content:   v.Content,
+			StartTime: v.StartTime,
+			EndTime:   v.EndTime,
+		})
+	}
+	ctx.JSON(http.StatusOK, gin.H{"code": 200, "message": "获取成功", "tasks": tasks})
+}

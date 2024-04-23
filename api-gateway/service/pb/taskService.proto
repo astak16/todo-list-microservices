@@ -19,7 +19,7 @@ message TaskResponse {
 }
 
 message TaskListResponse{
-  repeated TaskModel taskDetail = 1;
+  repeated TaskModel tasks = 1;
   uint32 code = 2;
 }
 

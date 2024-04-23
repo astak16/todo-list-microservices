@@ -62,6 +62,24 @@ func (t *Task) UpdateTask(req *service.TaskRequest) (*Task, error) {
 	return &task, nil
 }
 
+func (*Task) DeleteTask(req *service.TaskRequest) (bool, error) {
+	if isExist := (&Task{}).CheckTaskIsExist(req.TaskID); !isExist {
+		return false, errors.New("任务不存在")
+	}
+	if err := global.DB.Where("id = ?", req.TaskID).Delete(&Task{}).Error; err != nil {
+		return false, err
+	}
+	return true, nil
+}
+
+func (*Task) TaskList(req *service.TaskRequest) ([]*Task, error) {
+	var tasks []*Task
+	if err := global.DB.Find(&tasks).Error; err != nil {
+		return nil, err
+	}
+	return tasks, nil
+}
+
 func (*Task) CheckTaskIsExist(taskID uint32) bool {
 	var task Task
 	if err := global.DB.Model(&Task{}).Where("id = ?", taskID).First(&task).Error; err != nil {
