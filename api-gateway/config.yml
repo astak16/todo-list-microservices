@@ -6,4 +6,6 @@ etcd:
   host: etcd-server
   port: 2379
   prefix: /service
+jwt:
+  secret: uccs
 

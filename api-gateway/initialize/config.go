@@ -19,4 +19,5 @@ func InitConfig() {
 
 	global.Server = global.ServerConfig.Server
 	global.EtcdConfig = global.ServerConfig.Etcd
+	global.Jwt = global.ServerConfig.Jwt
 }

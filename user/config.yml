@@ -2,7 +2,6 @@ server:
   name: user
   host: 127.0.0.1
   port: 10001
-  jwtSecret: uccs
 mysql:
   driverName: mysql
   host: go-uccs-1

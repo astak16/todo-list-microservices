@@ -2,7 +2,6 @@ package handler
 
 import (
 	"context"
-	"strconv"
 	"user/model"
 	"user/service"
 )
@@ -24,7 +23,7 @@ func (*AuthService) Register(ctx context.Context, req *service.UserRequest) (res
 	return &service.UserResponse{
 		Code: 200,
 		Data: &service.UserModel{
-			UserID:   strconv.Itoa(int(u.ID)),
+			UserID:   uint32(u.ID),
 			UserName: u.UserName,
 		},
 	}, nil
@@ -40,7 +39,7 @@ func (*AuthService) Login(ctx context.Context, req *service.UserRequest) (resp *
 	return &service.UserResponse{
 		Code: 200,
 		Data: &service.UserModel{
-			UserID:   strconv.Itoa(int(u.ID)),
+			UserID:   uint32(u.ID),
 			UserName: u.UserName,
 		},
 	}, nil

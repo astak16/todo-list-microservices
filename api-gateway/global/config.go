@@ -3,6 +3,7 @@ package global
 type Config struct {
 	Server ServerInfo `mapstructure:"server"`
 	Etcd   Etcd       `mapstructure:"etcd"`
+	Jwt    JWT        `mapstructure:"jwt"`
 	// UserService UserServiceConfig `mapstructure:"user"`
 }
 
@@ -23,11 +24,16 @@ type Etcd struct {
 // 	Port int    `mapstructure:"port"`
 // }
 
+type JWT struct {
+	Secret string `mapstructure:"secret"`
+}
+
 var (
 	ServerConfig Config
 	// UserService  UserServiceConfig
 	Server     ServerInfo
 	EtcdConfig Etcd
+	Jwt        JWT
 )
 
 const EtcdServerKey = "/services"

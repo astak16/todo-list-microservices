@@ -2,7 +2,7 @@ package handler
 
 import (
 	"api-gateway/service"
-	"fmt"
+	"api-gateway/utils"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -11,6 +11,12 @@ import (
 type User struct {
 	UserName string `json:"userName" binding:"required"`
 	Password string `json:"password" binding:"required"`
+}
+
+type UserResponse struct {
+	Token    string `json:"token"`
+	UserID   uint32 `json:"userId"`
+	UserName string `json:"username"`
 }
 
 func UserRegister(ctx *gin.Context) {
@@ -55,16 +61,24 @@ func UserLogin(ctx *gin.Context) {
 		UserName: userReq.UserName,
 		Password: userReq.Password,
 	})
+
 	if err != nil {
 		ctx.JSON(http.StatusOK, gin.H{"code": 400, "message": err.Error()})
 		return
 	}
-	fmt.Println(u, "uuuussss")
+
+	token, err := utils.GenerateToken(uint(u.Data.UserID))
+
+	if err != nil {
+		ctx.JSON(http.StatusOK, gin.H{"code": 400, "messge": err.Error()})
+		return
+	}
 
 	ctx.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "登录成功",
-		"user": service.UserModel{
+		"user": UserResponse{
+			Token:    token,
 			UserID:   u.Data.UserID,
 			UserName: u.Data.UserName,
 		},
