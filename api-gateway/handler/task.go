@@ -90,3 +90,20 @@ func UpdateTask(ctx *gin.Context) {
 		},
 	})
 }
+
+func DeleteTask(ctx *gin.Context) {
+	var task struct {
+		ID uint32 `json:"id" binding:"required"`
+	}
+	if err := ctx.ShouldBindJSON(&task); err != nil {
+		ctx.JSON(http.StatusOK, gin.H{"code": 400, "message": err.Error()})
+		return
+	}
+	taskService := ctx.Keys["task"].(service.TaskServiceClient)
+	_, err := taskService.TaskDelete(ctx, &service.TaskRequest{TaskID: task.ID})
+	if err != nil {
+		ctx.JSON(http.StatusOK, gin.H{"code": 400, "message": err.Error()})
+		return
+	}
+	ctx.JSON(http.StatusOK, gin.H{"code": 200, "message": "删除成功"})
+}
